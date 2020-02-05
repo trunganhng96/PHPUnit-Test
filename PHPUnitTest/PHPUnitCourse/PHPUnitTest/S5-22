@@ -1,0 +1,13 @@
+ĐỊnh nghĩa lại function notify:
+ -thay return... bằng return true;
+Test vendor/bin/phpunit => pass
+ĐỊnh nghĩa lại function testNotifycationIsSent:
+ -thay $mock_mailer->method('snedMessage')
+		   ->willReturn(true);
+  bằng $mock_mailer->expects( $this->once() )
+		   ->method('snedMessage')
+		   ->with( $this->equalTo('dave@example.com'), $this->equalTo('Hello') ) 
+		   ->willReturn(true);
+Test vendor/bin/phpunit => pass
+Lưu ý: nếu thay once() bằng never() hay đổi giá trị truyền vào method equalTo
+Test vendor/bin/phpunit => Fail

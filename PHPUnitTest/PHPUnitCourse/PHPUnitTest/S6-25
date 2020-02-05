@@ -1,0 +1,15 @@
+Khai báo function tearDown
+ -( public function tearDown(): void
+ĐỊnh nghĩa function tearDown:
+ -Mock::close();
+
+hoặc
+
+Dùng useMockery\Adapter\PHPUnit\MockeryTestCase
+class extends MockeryTestCase
+ ->không cần khai báo hay định nghĩa function tearDown()
+=> có thể sử dụng mockery
+
+
+
+KẾT LUẬN: hướng dẫn install và cách sử dụng mockery

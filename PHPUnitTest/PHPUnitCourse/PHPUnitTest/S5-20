@@ -1,0 +1,37 @@
+PHPUNIT MOCK TEST
+Section 5: Lesson 20
+
+Test 1 class riêng biệt mà không sử dụng class nào bên trong function của nó.
+Tuy nhiên rất phổ biến để có 1 class dựa theo những class khác
+VD: Class User có thể sử dụng object của class DB hay sử dụng class Mailer để gửi 1 email,...
+Khi test 1 class, ta muốn test nó 1 cách độc lập.
+Các class liên quan đều có cách test riêng
+Vậy ý tưởng là chúng ta không sử dụng các class liên quan cũng như các method của nó vì sẽ mất thời gian thực thi hoặc thậm chí là không thực thi được
+VD: giả sử các class liên quan hay method của nó kết nối với 1 server bên ngoài. sử dụng chúng khi test có thể gây ra kết quả ngoài ý muốn như gửi email hay ghi nợ vào tài khoản ngân hàng chẳng hạn
+Thay vào đó ta chỉ muốn test class ta muốn
+Vậy làm sao để tránh các class liên quan khi test 1 class
+GIẢI PHÁP là sử dụng TEST DOUBLES
+Ta thay thế 1  object của class liên quan = 1 FAKE/ MOCK object, và ta có thể điều khiển toàn bộ qua MOCK object, để có thể xóa những thứ liên quan đến code hay nguồn bên ngoài khi test 1 class
+VD: ta có 1 class Mailer chưa các method như gửi message, lấy địa chỉ email hay 1 message như 1 đối số(argument). Tại đây, để gửi email, bạn sẽ sử dụng PHP function mail() hay PHPMailer cho VD gửi message qua mail server
+Tuy nhiên, mục đích của việc này là ta muốn method chịu trách nhiệm, nên ta set 3s delay để mô phỏng thời gian mà method này thực thi
+Tiếp đó, ta in ra 1 message và trả về true.
+Tạo 1 test class mới tên là MockTest để có thể thấy mock hoạt động ntn.
+Tại đây, sau khi định nghĩa class, thêm cho nó 1 method, và trước khi tạo MOCK object hãy sử dụng Mailer class. Nó sẽ được sử dụng ntn? 
+Rất đơn giản, ta tạo 1 đối tượng của class, tiếp đó gọi 1 method sendMessage(), truyền vào cho nó 1 địa chỉ email và 1 message.
+sau đó, var_dump giá trị trả về và ta có thể thấy kết quả đã được trả về
+Ta nhận được 1 thông điệp nói rằng đó là 1 cách test may rủi vì nó không biểu diễn 1 sự khẳng định nào cả nhưng nó đáng được mong chờ
+Mục đích của việc là này là để chỉ ra việc ta có thể sử dụng class này ntn. Khi ta test 1 class mà hiện ra thông báo này, ta sẽ muốn tạo 1 phiên bản Mock cho class đó.
+Thay vì tạo 1 object cho Mailer class, ta có thể sử dụng method createMock(), truyền vào cho nó tên class mà ta đang Mocking. Mock object chứa tất cả các thuộc tính và method của class gốc. Tuy nhiên hiện giờ method mới chỉ return NULL chứ chưa làm gì.
+Để thấy được điều này, hãy gán method sendMessage() vào Mock object, truyền vào nó 1 đối số như trước.
+Now, ta chạy test, nó trả kết quả về thẳng và không còn delay nữa. ta không quan tâm đến thông điệp mà chỉ cần để ý giá trị trả về từ method là NULL.
+Vậy bạn có thể thấy rằng Mock object chứa method này và nó chập nhận các đối số này.
+các method này như những stub, và chúng thay thế method gốc từ class Mock.
+Mặc định là nó trả về null nhưng ta có thể trả về những thứ khác bằng cách gán cho Mock object rằng method này trả về true
+Ta thực hiện nó trước khi gọi method
+Now, khi ta chạy test, ta có thể thấy các Stub method được gọi trả về true.
+var_dump để khẳng định nó trả về true.
+Now, khi ta chạy test, tất cả đều pass và báo xanh(pass thành công)
+Vậy bất cứ khi nào test code mà phụ thuộc vào class khác, ta hãy tạo Mock object của các class đó để xóa các class liên quan
+
+
+

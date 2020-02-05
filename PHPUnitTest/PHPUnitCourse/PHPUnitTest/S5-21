@@ -1,0 +1,36 @@
+Khai báo $email
+Khai báo function notify với đối số $message
+Định nghĩa function notify:
+ -khởi tạo $mailer của Mailer
+ -return $mailer gọi method sendMessage với 2 đối $this-email, message
+Khai báo function testNotificationIsSent
+ĐInh nghĩa function testNotificationIsSent:
+ -khởi tạo $user của User
+ -$user gán cho biến email 1 giá trị
+ -$user gọi tới method notify, gán cho $message 1 giá trị "Hello"
+ -assertTrue method notify 
+Test vendor/bin/phpunit => pass
+Tạo $mock_mailer của class Mailer và gọi tới method createMock 
+ -($mock_mailer = $this->createMock(Mailer::class)
+$mock_mailer gọi method sendMessage và Return True 
+ -( $mock_mailer->method('sendMessage')
+		->willReturn(true); )
+Test vendor/bin/phpunit => pass
+Khai báo function setMailer với đối số $mailer của class Mailer
+ĐỊnh nghĩa function setMailer:
+ -truyền vào $mailer 1 giá trị $mailer ($this->mailer = $mailer)
+Định nghĩa lại function notify:
+ -không cần khởi tạo $mailer của Mailer
+ -return $this->($mailer gọi method sendMessage với 2 đối $this-email, message)
+ĐỊnh nghĩa lại function testNotificationIsSent:
+ -$user gọi tới method setMailer()
+ -truyền vào method $object "new Mailer"
+Test vendor/bin/phpunit => pass
+ĐỊnh nghĩa lại function testNotificationIsSent:
+ -thay $object "new Mailer" bằng $mock_mailer
+Test vendor/bin/phpunit => pass
+
+
+
+
+

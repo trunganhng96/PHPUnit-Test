@@ -1,0 +1,25 @@
+Khai báo function tearDown
+ -( public function tearDown(): void
+ĐỊnh nghĩa function tearDown:
+ -Mock::close();
+Khai báo function testOrderIsProcessedUsingMockery
+ĐỊnh nghĩa function testOrderIsProcessedUsingMockery:
+ -Khởi tạo $gateway gọi tới method mock của class Mockery và truyền vào giá trị là 1 class
+   +( $gateway = Mockery::mock('PaymentGateway') )
+ -$gateway gọi tới method shouldReceive và truyền vào giá trị là 1 method
+	   gọi tới method once
+	   gọi tới method with và truyền vào giá trị là 200
+	   gọi tới method andReturn và trả về True
+   +( $gateway->shouldReceive('charge')
+	    ->once()
+	    ->with(200)
+	    ->andReturn(true); )
+ -Khởi tạo $order của class Order và truyền vào tham số $gateway
+ -$order gán cho $amount giá trị = 200;
+ -$order gọi tới method process() và return True
+   +( $this->assertTrue( $order->process() ) )
+Test vendor/bin/phpunit => pass
+
+
+
+KẾT LUẬN: Dùng Mockery Kiểm Tra Trước Xem Có Ra Được Kết Quả Như Mong Đợi Hay Không Trước Khi Code nhưng với cách code dễ dọc hiểu và gọn hơn 

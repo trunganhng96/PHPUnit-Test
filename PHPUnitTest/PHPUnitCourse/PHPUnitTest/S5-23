@@ -1,0 +1,33 @@
+ĐỊnh nghĩa lại function sendMessage:
+ -if ( empty($email) ) {
+     throw new Exception
+  }
+Khai báo function testCannotNotifyUserWithNoEmail
+Định nghĩa function testCannotNotifyUserWithNoEmail:
+ -Khởi tạo $user của User
+ -Tạo $mock_mailer của class Mailer và gọi tới method createMock 
+   +( $mock_mailer = $this->createMock(Mailer::class) )
+ -$mock_mailer gọi tới method sendMessage và truyền vào method throwException $object "new Exception" 
+   +( $mock_mailer->method('sendMessage')
+		  ->will( $this->throwException(new Exception) );
+ -$user gọi tới method setMailer và truyền vào tham số $mock_mailer
+ -class UserTest thực thi method expectException với $object được khởi tạo bởi class Exception
+   +$this->expectException(Exception::class)
+ -$user gọi tới method notify và truyền vào giá trị "Hello"
+Test vendor/bin/phpunit => pass
+Bỏ ( $mock_mailer->method('sendMessage')
+		 ->will( $this->throwException(new Exception) );
+Thay createMock bằng getMockBuilder và gọi tới method getMock()
+ -$mock_mailer = $this->getMockBuilder(Mailer::class) 
+		      ->getMock();
+Test vendor/bin/phpunit => Fail
+$mock_mailer gọi tới method setMethods và truyền vào tham số null
+ -$mock_mailer = $this->getMockBuilder(Mailer::class)
+		      ->setMethods(null) 
+		      ->getMock();
+Test vendor/bin/phpunit => pass
+Thay null bằng 1 mảng chứa method sendMessage
+ -$mock_mailer = $this->getMockBuilder(Mailer::class)
+		      ->setMethods(['sendMessage']) 
+		      ->getMock();
+Test vendor/bin/phpunit => Fail

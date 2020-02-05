@@ -1,0 +1,39 @@
+Cách 1: dùng mock
+Khai báo function testOrderIsProcessedUsingAMock
+ĐỊnh nghĩa function testOrderIsProcessedUsingAMock:
+ -Khởi tạo $order của class Order và truyền vào 2 giá trị
+   +( $order = new Order(3, 1.99); ) 
+ -$order gọi tới $amount. Sau đó assertEquals và truyền vào 2 giá trị là tổng và ( $order gọi tới $amount ) 
+   +( $this->assertEquals(5.97, $order->amount); )
+ -Khởi tạo $gateway_mock gọi tới method mock của class Mockery và truyền vào tham số là 1 class
+   +( $gateway_mock = Mockery::mock('PaymentGateway'); )
+ -$service gọi tới method shouldReceive và truyền vào tham số là 1 function
+           gọi tới method once
+           gọi tới method with và truyền vào 1 giá trị
+   +( $gateway_mock->shouldReceive('charge')
+		   ->once()
+		   ->with('5.97'); )
+ -$order gọi tới method process và truyền vào tham số $gateway_mock
+   +( $order->process($gateway_mock); )
+
+Cách 2: dùng spy
+Khai báo function testOrderIsProcessedUsingASpy
+ĐỊnh nghĩa function testOrderIsProcessedUsingASpy:
+ -Khởi tạo $order của class Order và truyền vào 2 giá trị
+   +( $order = new Order(3, 1.99); ) 
+ -$order gọi tới $amount. Sau đó assertEquals và truyền vào 2 giá trị là tổng và ( $order gọi tới $amount ) 
+   +( $this->assertEquals(5.97, $order->amount); )
+ -Khởi tạo $gateway_spy gọi tới method mock của class Mockery và truyền vào tham số là 1 class
+   +( $gateway_spy = Mockery::spy('PaymentGateway'); )
+ -$order gọi tới method process và truyền vào tham số $gateway_spy
+   +( $order->process($gateway_spy); )
+ -$service gọi tới method shouldHaveReceived và truyền vào tham số là 1 function
+           gọi tới method once
+           gọi tới method with và truyền vào 1 giá trị
+   +( $gateway_spy->shouldHaveReceived('charge')
+		   ->once()
+		   ->with('5.97'); )
+
+
+
+kết luận: spy tương tự mock. mock là đưa ra kết quả rồi chạy quá trình còn spy là chạy quá trình rồi đưa ra kết quả

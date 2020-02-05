@@ -1,0 +1,37 @@
+Khai báo function testOrderIsProcessed
+Định nghĩa function testOrderIsProcessed:
+ -Khởi tạo $gateway của class PaymentGateway
+ĐỊnh nghĩa lại function testOrderIsProcessed:
+ -Khởi tạo $gateway gọi tới method createMock và truyền vào giá trị là 1 class
+   +( $gateway = $this->createMock('PaymentGateway') )
+ -Khởi tạo $order của class Order và truyền vào tham số $gateway
+ -$order gán cho $amount giá trị = 200;
+ -$order gọi tới method process() và assertTrue
+   +( $this->assertTrue( $order->process() ) )
+
+Test vendor/bin/phpunit => warning
+Thay createMock bằng getMockBuilder và gọi tới method getMock()
+ -( $gateway = $this->getMockBuilder('PaymentGateway')
+		    ->getMock(); )
+Test vendor/bin/phpunit => error
+ĐỊnh nghĩa lại function testOrderIsProcessed:
+$gateway gọi tới method setMethods và truyền vào tham số là 1 mảng có giá trị là 1 method
+ -( $gateway = $this->getMockBuilder('PaymentGateway')
+		    ->setMethods(['charge'])
+		    ->getMock(); )
+Test vendor/bin/phpunit => Fail
+ĐỊnh nghĩa lại function testOrderIsProcessed:
+$gateway gọi tới method method() và truyền vào tham số là 1 method
+ -( $gateway->method('charge')
+	    ->willReturn(true); ) 
+$gateway gọi tới method expects và truyền vào tham số method once() và gọi tới method with và truyền vào tham số là method equalTo có giá trị 200
+ -( $gateway->expects( $this->once() )
+	   ->method('charge')
+	   ->with( $this->equalTo(200) )
+	   ->willReturn(true); )
+Test vendor/bin/phpunit => pass
+
+
+
+KẾT LUẬN: Dùng Mockery Kiểm Tra Trước Xem Có Ra Được Kết Quả Như Mong Đợi Hay Không Trước Khi Code
+

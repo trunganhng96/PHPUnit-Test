@@ -1,0 +1,37 @@
+Cách 1: không dùng mockery
+Khai báo function testCorrectAverageIsReturned
+ĐỊnh nghĩa function testCorrectAverageIsReturned:
+ -Khởi tạo $service gọi tới method createMock và truyền vào tham số là 1 class
+   +( $service = $this->createMock(TemperatureService::class); ) 
+ - Khai báo $map là 1 mảng có 2 giá trị
+   +( $map = [ ['12:00', 20], ['14:00', 26] ]; )
+ -$service gọi tới method expects và truyền vào tham số là 1 method có chứa giá trị
+           gọi tới method method và truyền vào tham số là 1 function
+           gọi tới method will và truyền vào tham số là 1 method có chứa tham số
+   +( $service->expects( $this->exactly(2) )
+	      ->method('getTemperature')
+	      ->will( $this->returnValueMap($map) ); )
+ -Khởi tạo $weather của class WeatherMonitor và truyền vào 1 tham số $service
+ -$weather gọi tới method getAverageTemperature và truyền vào 2 giá trị. Sau đó assertEquals và truyền vào 2 tham số là giá trị trung bình và ($weather gọi tới method getAverageTemperature và truyền vào 2 giá trị)
+   +( $this->assertEquals( 23, $weather->getAverageTemperature('12:00', '14:00') ); )
+
+Cách 2: dùng mockery
+Khai báo function testCorrectAverageIsReturnedWithMockery
+ĐỊnh nghĩa function testCorrectAverageIsReturnedWithMockery:
+ -Khởi tạo $service gọi tới method mock của class Mockery và truyền vào tham số là 1 class
+   +( $service = Mockery::mock(TemperatureService::class); ) 
+ -$service gọi tới method shouldReceive và truyền vào tham số là 1 function
+           gọi tới method once
+           gọi tới method with và truyền vào 1 giá trị
+           gọi tới method andReturn và truyền vào 1 giá trị
+   +( $service->shouldReceive('getTemperature')->once()->with('12:00')->andReturn(20);
+            $service->shouldReceive('getTemperature')->once()->with('14:00')->andReturn(26); )
+ -Khởi tạo $weather của class WeatherMonitor và truyền vào 1 tham số $service
+ -$weather gọi tới method getAverageTemperature và truyền vào 2 giá trị. Sau đó assertEquals và truyền vào 2 tham số là giá trị trung bình và ($weather gọi tới method getAverageTemperature và truyền vào 2 giá trị)
+   +( $this->assertEquals( 23, $weather->getAverageTemperature('12:00', '14:00') ); )
+
+
+
+KẾT LUẬN: 2 cách có cùng kết quả nhưng cách 2 code gọn hơn
+
+
